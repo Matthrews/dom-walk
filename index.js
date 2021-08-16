@@ -8,12 +8,14 @@ function iterativelyWalk(nodes, cb) {
         nodes = [nodes]
     }
     
+    var depth = 0;
+    
     // 将伪数组处理为标准数组
     nodes = slice.call(nodes)
 
     while(nodes.length) {
         var node = nodes.shift(),
-            ret = cb(node) // 回调函数回显node
+            ret = cb(node, depth) // 回调函数回显node
 
         if (ret) {
             return ret
@@ -22,7 +24,8 @@ function iterativelyWalk(nodes, cb) {
         // 深度优先
         if (node.childNodes && node.childNodes.length) {
             // 变量很少，都在nodes上操作，符合ninja原则
-            nodes = slice.call(node.childNodes).concat(nodes)
+            nodes = slice.call(node.childNodes).concat(nodes);
+            depth++;
         }
     }
 }
